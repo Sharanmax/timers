@@ -67,7 +67,6 @@ export class TimerAudio {
   }
 
   private cleanup(): void {
-    console.log("check here context ---", this)
 
     if (this.oscillator) {
       try {

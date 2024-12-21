@@ -1,10 +1,29 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { TimerItem } from './TimerItem';
 import { useTimerStore } from '../store/useTimerStore';
 import { EmptyState } from './EmptyState';
+import { useScreenType } from '../hooks/screenType';
+import { showTimerEndToast } from '../utils/timerEndToast';
 
 export const TimerList: React.FC = () => {
-  const { timers } = useTimerStore();
+  const { timers, updateTimer } = useTimerStore();
+  const screenType = useScreenType()
+  const toastPosition = screenType === 'desktop' ? 'top-right' : 'bottom-center';
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      timers.forEach((timer) => {
+        if (timer.isRunning && timer.remainingTime > 0) {
+          if (timer.remainingTime === 1) {
+            showTimerEndToast(timer, toastPosition);
+          }
+          updateTimer(timer.id);
+        }
+      });
+    }, 1000);
+
+    return () => clearInterval(intervalId);
+  }, [timers, updateTimer, toastPosition]);
 
   return (
     <div className="space-y-4 min-h-[400px]">
@@ -19,7 +38,7 @@ export const TimerList: React.FC = () => {
           </p>
         </div>
       ) : (
-        <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 mt-4">
           {timers.map((timer) => (
             <TimerItem key={timer.id} timer={timer} />
           ))}
