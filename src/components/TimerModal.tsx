@@ -53,7 +53,6 @@ export const TimerModal: React.FC<TimerModalProps> = ({
                 setMinutes(m);
                 setSeconds(s);
             } else {
-                // Adding a new timer - reset fields
                 setTitle('');
                 setDescription('');
                 setHours(0);
@@ -61,7 +60,6 @@ export const TimerModal: React.FC<TimerModalProps> = ({
                 setSeconds(0);
             }
 
-            // Reset touched states each time we open
             setTouched({
                 title: false,
                 hours: false,
@@ -71,7 +69,6 @@ export const TimerModal: React.FC<TimerModalProps> = ({
         }
     }, [isOpen, isEditMode, timer]);
 
-    // If modal is not open, don’t render anything
     if (!isOpen) return null;
 
     const handleSubmit = (e: React.FormEvent) => {
@@ -82,20 +79,19 @@ export const TimerModal: React.FC<TimerModalProps> = ({
             return;
         }
 
-        // If valid, calculate total seconds
         const totalSeconds = hours * 3600 + minutes * 60 + seconds;
 
         if (isEditMode && timer) {
-            // Editing existing timer
+            
             editTimer(timer.id, {
                 title: title.trim(),
                 description: description.trim(),
                 duration: totalSeconds,
-                remainingTime: totalSeconds, // optionally reset
-                isRunning: false,            // optionally reset
+                remainingTime: totalSeconds, 
+                isRunning: false,            
             });
         } else {
-            // Adding a brand-new timer
+            
             addTimer({
                 title: title.trim(),
                 description: description.trim(),
@@ -111,7 +107,6 @@ export const TimerModal: React.FC<TimerModalProps> = ({
 
     const handleClose = () => {
         onClose();
-        // Optionally reset touched here if desired
         setTouched({
             title: false,
             hours: false,
@@ -120,7 +115,6 @@ export const TimerModal: React.FC<TimerModalProps> = ({
         });
     };
 
-    // For dynamic styling & messages
     const isTimeValid = hours > 0 || minutes > 0 || seconds > 0;
     const isTitleValid = title.trim().length > 0 && title.length <= 50;
 
@@ -146,7 +140,6 @@ export const TimerModal: React.FC<TimerModalProps> = ({
 
                 {/* Form */}
                 <form onSubmit={handleSubmit} className="space-y-6">
-                    {/* Title Field */}
                     <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">
                             Title <span className="text-red-500">*</span>
@@ -157,7 +150,6 @@ export const TimerModal: React.FC<TimerModalProps> = ({
                             onChange={(e) => setTitle(e.target.value)}
                             onBlur={() => setTouched({ ...touched, title: true })}
                             maxLength={50}
-                            // Uniform input styles
                             className={`[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none w-full px-3 py-2 border rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-50${touched.title && !isTitleValid
                                     ? 'border-red-500'
                                     : 'border-gray-300'
@@ -174,7 +166,6 @@ export const TimerModal: React.FC<TimerModalProps> = ({
                         </p>
                     </div>
 
-                    {/* Description Field */}
                     <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">
                             Description
@@ -188,13 +179,11 @@ export const TimerModal: React.FC<TimerModalProps> = ({
                         />
                     </div>
 
-                    {/* Duration (Hours / Minutes / Seconds) */}
                     <div>
                         <label className="block text-sm font-medium text-gray-700 mb-3">
                             Duration <span className="text-red-500">*</span>
                         </label>
                         <div className="grid grid-cols-3 gap-4">
-                            {/* Hours */}
                             <div>
                                 <label className="block text-sm text-gray-600 mb-1">Hours</label>
                                 <input
@@ -209,7 +198,6 @@ export const TimerModal: React.FC<TimerModalProps> = ({
                                     className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearw-full px-3 py-2 border border-gray-300 rounded-md shadow-smfocus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                                 />
                             </div>
-                            {/* Minutes */}
                             <div>
                                 <label className="block text-sm text-gray-600 mb-1">Minutes</label>
                                 <input
@@ -224,7 +212,6 @@ export const TimerModal: React.FC<TimerModalProps> = ({
                                     className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appeaw-full px-3 py-2 border border-gray-300 rounded-md shadow-smfocus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                                 />
                             </div>
-                            {/* Seconds */}
                             <div>
                                 <label className="block text-sm text-gray-600 mb-1">Seconds</label>
                                 <input
@@ -247,7 +234,6 @@ export const TimerModal: React.FC<TimerModalProps> = ({
                         )}
                     </div>
 
-                    {/* Footer Buttons */}
                     <div className="flex justify-end gap-3 pt-4 border-t">
                         <button
                             type="button"
