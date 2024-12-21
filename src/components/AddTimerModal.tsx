@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { X, Clock } from 'lucide-react';
 import { useTimerStore } from '../store/useTimerStore';
 import { validateTimerForm } from '../utils/validation';
+import { useScreenType } from '../hooks/screenType';
 
 interface AddTimerModalProps {
   isOpen: boolean;
@@ -20,6 +21,7 @@ export const AddTimerModal: React.FC<AddTimerModalProps> = ({ isOpen, onClose })
     minutes: false,
     seconds: false,
   });
+  const screenType = useScreenType()
   
   const { addTimer } = useTimerStore();
 
@@ -28,7 +30,7 @@ export const AddTimerModal: React.FC<AddTimerModalProps> = ({ isOpen, onClose })
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!validateTimerForm({ title, description, hours, minutes, seconds })) {
+    if (!validateTimerForm({ title, description, hours, minutes, seconds }, screenType)) {
       return;
     }
 
@@ -185,12 +187,8 @@ export const AddTimerModal: React.FC<AddTimerModalProps> = ({ isOpen, onClose })
             </button>
             <button
               type="submit"
-              className={`px-4 py-2 text-sm font-medium text-white rounded-md transition-colors ${
-                isTitleValid && isTimeValid
-                  ? 'bg-blue-600 hover:bg-blue-700'
-                  : 'bg-blue-400 cursor-not-allowed'
-              }`}
-              disabled={!isTitleValid || !isTimeValid}
+              className={`px-4 py-2 text-sm font-medium text-white rounded-md transition-colors bg-blue-600 hover:bg-blue-700`}
+              //disabled={!isTitleValid || !isTimeValid}
             >
               Add Timer
             </button>

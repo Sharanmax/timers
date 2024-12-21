@@ -8,6 +8,7 @@ import { EditTimerModal } from './EditTimerModal';
 import { TimerAudio } from '../utils/audio';
 import { TimerControls } from './TimerControls';
 import { TimerProgress } from './TimerProgress';
+import { useScreenType } from '../hooks/screenType';
 
 interface TimerItemProps {
   timer: Timer;
@@ -19,6 +20,7 @@ export const TimerItem: React.FC<TimerItemProps> = ({ timer }) => {
   const intervalRef = useRef<number | null>(null);
   const timerAudio = TimerAudio.getInstance();
   const hasEndedRef = useRef(false);
+  const screenType = useScreenType()
 
   useEffect(() => {
     if (timer.isRunning) {
@@ -31,6 +33,7 @@ export const TimerItem: React.FC<TimerItemProps> = ({ timer }) => {
           
           toast.success(`Timer "${timer.title}" has ended!`, {
             duration: Infinity,
+            position: screenType === 'desktop' ? 'top-right' : 'bottom-center',
             action: {
               label: 'Dismiss',
               onClick: () => {
