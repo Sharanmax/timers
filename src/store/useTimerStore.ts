@@ -2,8 +2,17 @@ import { configureStore, createSlice } from '@reduxjs/toolkit';
 import { useDispatch, useSelector } from 'react-redux';
 import { Timer } from '../types/timer';
 
+function loadTimersFromLocalStorage(): Timer[] {
+  try {
+    const data = localStorage.getItem('timers');
+    return data ? JSON.parse(data) : [];
+  } catch {
+    return [];
+  }
+}
+
 const initialState = {
-  timers: [] as Timer[],
+  timers: loadTimersFromLocalStorage() as Timer[],
 };
 
 const timerSlice = createSlice({
@@ -56,6 +65,8 @@ const store = configureStore({
 });
 
 export { store };
+
+export type RootState = ReturnType<typeof store.getState>;
 
 export const {
   addTimer,
